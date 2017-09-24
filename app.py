@@ -39,9 +39,11 @@ def hello_world():
         if url_check(url):
             threading.Thread(target=lambda: download_in_background(url)).start()
             result = {"success": True}
+            return jsonify(result)
     except Exception as e:
         result = {"error": True, "reason": str(e)}
-    return jsonify(result)
+        return jsonify(result), 400
+
 
 
 def download_in_background(url):
