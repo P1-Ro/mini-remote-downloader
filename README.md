@@ -23,9 +23,16 @@ A simple web app to help you download files on server, it's like a proxyed downl
 To start downloading simply make `POST` request on server with JSON looking like this:
 ```
 {
-    url: "http://example.com"
+    "url": "http://example.com",     // url to be downloaded
+    "name": "example" [optional],    // new name of downloaded file
+    "category": "example" [optional] // subfolder in downloads folder
 }
 ``` 
-And also use `Authorization` header with same userName and password you set in `app.py`
+And also use `Authorization` header with same `{UserName}` and `{Password}` you set in `app.py`
 
 If dowloading started successfully Status code **`200`** will be returned, otherwise Status code will be **`409`** with actual error message in `JSON`.
+
+## TODO
+
+- Add support for downloading videos from Youtube
+- Add support for downloading videos from OpenLoad
