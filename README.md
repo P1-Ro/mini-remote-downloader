@@ -6,7 +6,7 @@ Built with as little dependencies as possible.
 
 0. Clone this repo
     ```
-    git clone https://github.com/aulphar/remote-downloader.git
+    git clone https://github.com/TheGlow666/mini-remote-downloader.git
     ```
 
 1. Replace placeholders for PATH_TO_SAVE,  user and password
