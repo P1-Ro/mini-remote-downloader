@@ -7,10 +7,12 @@ from pip._vendor import requests
 
 app = Flask(__name__)
 PATH_TO_SAVE = "{PATH}"
+user = '{UserName}'
+user_pass = '{Password}'
 
 
 def check_auth(username, password):
-    return username == '{UserName}' and password == '{Password}'
+    return username == user and password == user_pass
 
 
 def authenticate():

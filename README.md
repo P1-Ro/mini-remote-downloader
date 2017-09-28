@@ -9,10 +9,11 @@ Built with as little dependencies as possible.
     git clone https://github.com/aulphar/remote-downloader.git
     ```
 
-1. Replace placeholders for userName, password, and output directory
+1. Replace placeholders for PATH_TO_SAVE,  user and password
     ```
-    return username == '{UserName}' and password == '{Password}'
     PATH_TO_SAVE = "{PATH}"
+    user = '{UserName}'
+    password = '{Password}'
     ```
     
 2. Start python app
