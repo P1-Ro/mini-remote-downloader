@@ -6,7 +6,7 @@ Supports downloading from Youtube and other video sites handled by [Youtube-dl.]
 
 0. Clone this repo
     ```
-    git clone https://github.com/aulphar/remote-downloader.git
+    git clone https://github.com/P1-Ro/mini-remote-downloader.git
     ```
 
 1. Replace placeholders for PATH_TO_SAVE,  user and password
