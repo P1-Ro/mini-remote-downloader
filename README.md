@@ -1,6 +1,6 @@
 # Mini Remote Downloader [![Codacy Badge](https://api.codacy.com/project/badge/Grade/661394942cb245c48732f46b255c33b3)](https://www.codacy.com/app/theglow666/mini-remote-downloader?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=TheGlow666/mini-remote-downloader&amp;utm_campaign=Badge_Grade) 
 A simple web app to help you download files on server, it's like a proxyed downloader, useful when certain sites are blocked.
-Built with as little dependencies as possible.
+Supports downloading from Youtube and other video sites handled by [Youtube-dl.](https://github.com/rg3/youtube-dl)
 
 ## Deploy
 
@@ -36,5 +36,4 @@ If dowloading started successfully Status code **`200`** will be returned, other
 
 ## TODO
 
-- Add support for downloading videos from Youtube
 - Add support for downloading videos from OpenLoad
