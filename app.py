@@ -4,11 +4,13 @@ from functools import wraps
 import os
 from flask import Flask, request, jsonify, Response
 from pip._vendor import requests
+import youtube_dl
 
 app = Flask(__name__)
 PATH_TO_SAVE = "{PATH}"
 user = '{UserName}'
 user_pass = '{Password}'
+ydl = youtube_dl.YoutubeDL({"outtmpl": PATH_TO_SAVE + "%(title)s.%(ext)s"})
 
 
 def check_auth(username, password):
@@ -49,7 +51,6 @@ def hello_world():
 
 def download_in_background(data):
     url = data["url"]
-    r = requests.get(url)
 
     if "name" in data:
         file_extension = url.split("?")[0].split(".")[-1]
@@ -64,8 +65,14 @@ def download_in_background(data):
     else:
         path = PATH_TO_SAVE + name
 
-    with open(path, "wb+") as code:
-        code.write(r.content)
+    if "youtube" in url or "oload" in url:
+        with ydl:
+            ydl.download([url])
+
+    else:
+        r = requests.get(url)
+        with open(path, "wb+") as code:
+            code.write(r.content)
 
 
 def url_check(url):
