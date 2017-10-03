@@ -1,7 +1,6 @@
 from __future__ import print_function
 import threading
 from functools import wraps
-import sys
 import os
 
 import sys
@@ -110,4 +109,4 @@ def url_check(url):
 
 
 if __name__ == '__main__':
-    app.run(port=9000, debug=True)
+    app.run(port=9000)
