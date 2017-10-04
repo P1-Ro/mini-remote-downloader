@@ -1,0 +1,6 @@
+---
+path: PATH
+username: USERNAME
+password: PASSWORD
+notify_via_pushbullet: False
+pushbullet_token: TOKEN
