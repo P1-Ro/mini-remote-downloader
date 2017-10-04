@@ -1,4 +1,4 @@
-# Mini Remote Downloader [![Codacy Badge](https://api.codacy.com/project/badge/Grade/661394942cb245c48732f46b255c33b3)](https://www.codacy.com/app/theglow666/mini-remote-downloader?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=TheGlow666/mini-remote-downloader&amp;utm_campaign=Badge_Grade) 
+# Mini Remote Downloader [![Codacy Badge](https://api.codacy.com/project/badge/Grade/661394942cb245c48732f46b255c33b3)](https://www.codacy.com/app/theglow666/mini-remote-downloader?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=TheGlow666/mini-remote-downloader&amp;utm_campaign=Badge_Grade) [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/661394942cb245c48732f46b255c33b3)](https://www.codacy.com/app/theglow666/mini-remote-downloader?utm_source=github.com&utm_medium=referral&utm_content=TheGlow666/mini-remote-downloader&utm_campaign=Badge_Coverage) 
 A simple web app to help you download files on server, it's like a proxyed downloader, useful when certain sites are blocked.
 Built with as little dependecies as possible.
 **Optionally** supports downloading from [Youtube](http://youtube.com)/[Openload](https://openload.co/) and sending notification via [PushBullet](https://www.pushbullet.com)
@@ -10,11 +10,11 @@ Built with as little dependecies as possible.
     git clone https://github.com/P1-Ro/mini-remote-downloader.git
     ```
 
-1. Replace placeholders for PATH_TO_SAVE,  user and password
+1. Replace placeholders in `config.yml`
     ```
-    PATH_TO_SAVE = "{PATH}"
-    user = '{UserName}'
-    password = '{Password}'
+    path: PATH
+    username: USERNAME
+    password: PASSWORD
     ```
     
 2. Start python app
@@ -57,9 +57,6 @@ If you want to be able download videos from youtube you need to perform these 2 
  ```
  pip install pushbullet.py
  ``` 
- 2) Set flag `notify_via_pushbullet` to `True`
- 3) Set `pushbullet_token` to your Access Token which you can get [here](https://www.pushbullet.com/#settings)
+ 2) Set flag `notify_via_pushbullet` in `config.yml` to `True`
+ 3) Set `pushbullet_token` in `config.yml` to your Access Token which you can get [here](https://www.pushbullet.com/#settings)
  
- ## TODO
- 
- - Extract all settings to single file instead of app.py
