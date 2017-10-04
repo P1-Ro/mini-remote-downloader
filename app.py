@@ -14,7 +14,7 @@ def load_conf():
     directory = os.path.dirname(os.path.abspath(__file__))
     with open(directory+"\config.yml", 'r') as stream:
         try:
-            return yaml.load(stream)
+            return yaml.safe_load(stream)
         except yaml.YAMLError as e:
             print(e, file=sys.stderr)
 
