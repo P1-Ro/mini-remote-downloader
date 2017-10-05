@@ -31,9 +31,9 @@ To start downloading simply make `POST` request on server with JSON looking like
     "category": "example" [optional] // subfolder in downloads folder
 }
 ``` 
-And also use `Authorization` header with same `{UserName}` and `{Password}` you set in `app.py`
+And also use `Authorization` header with same `USERNAME` and `PASSWORD` you set in `app.py` , otherwise you will get **`401 Unathorized`** response
 
-If dowloading started successfully Status code **`200`** will be returned, otherwise Status code will be **`409`** with actual error message in `JSON`.
+If dowloading started successfully Status code **`200`** will be returned, otherwise Status code will be **`500`** with actual error message in `JSON`.
 
 ## Optional
 
