@@ -1,6 +1,7 @@
 import json
-import app
 import unittest
+
+import app
 
 
 class DownloaderTestCase(unittest.TestCase):
@@ -11,7 +12,6 @@ class DownloaderTestCase(unittest.TestCase):
             "Authorization": "Basic VVNFUk5BTUU6UEFTU1dPUkQ=",
             "Content-Type": "application/json"
         }
-
 
     def test_general_download(self):
         tmp = self.app.post("/", data=json.dumps(dict(
@@ -29,19 +29,20 @@ class DownloaderTestCase(unittest.TestCase):
         })
         assert tmp.status_code == 401
 
-    def test_download_with_wrong_auth(self):
-        tmp = self.app.post("/", data=json.dumps(dict(
+    def wrong_download(self, headers):
+        return self.app.post("/", data=json.dumps(dict(
             url="https://mrose.org/cc/png-test.png"
-        )), headers={
+        )), headers=headers)
+
+    def test_download_with_wrong_auth(self):
+        tmp = self.wrong_download(headers={
             "Authorization": "Basic VVNFUk5BTUUyOlBBU1NXT1JEMg==",
             "Content-Type": "application/json"
         })
         assert tmp.status_code == 401
 
     def test_download_without_content_type(self):
-        tmp = self.app.post("/", data=json.dumps(dict(
-            url="https://mrose.org"
-        )), headers={
+        tmp = self.wrong_download(headers={
             "Authorization": "Basic VVNFUk5BTUU6UEFTU1dPUkQ="
         })
         assert tmp.status_code == 500
@@ -72,6 +73,7 @@ class DownloaderTestCase(unittest.TestCase):
     def test_pushbullet(self):
         tmp = app.on_complete("USERNAME", "test")
         assert tmp is True
+
 
 if __name__ == "__main__":
     unittest.main()
