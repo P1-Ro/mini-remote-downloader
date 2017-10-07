@@ -12,6 +12,7 @@ class DownloaderTestCase(unittest.TestCase):
             "Content-Type": "application/json"
         }
 
+
     def test_general_download(self):
         tmp = self.app.post("/", data=json.dumps(dict(
             url="https://mrose.org/cc/png-test.png",
