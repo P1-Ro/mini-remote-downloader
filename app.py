@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 
 def load_conf():
-    directory, filename =  os.path.split(os.path.realpath(__file__))
+    directory = os.path.split(os.path.realpath(__file__))[0]
     with open(os.path.join(directory, "config.yml"), 'r') as stream:
         try:
             return yaml.safe_load(stream)
