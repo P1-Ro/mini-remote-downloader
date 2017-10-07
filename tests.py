@@ -46,19 +46,20 @@ class DownloaderTestCase(unittest.TestCase):
         })
         assert tmp.status_code == 500
 
+    def download_youtube(self):
+        return self.app.post("/", data=json.dumps(dict(
+            url="https://www.youtube.com/watch?v=Pfq8f59u3kk"
+        )), headers=self.headers)
+
     def test_youtubedl_crash(self):
         ydl_tmp = app.ydl
         app.ydl = None
-        tmp = self.app.post("/", data=json.dumps(dict(
-            url="https://www.youtube.com/watch?v=Pfq8f59u3kk"
-        )), headers=self.headers)
+        tmp = self.download_youtube()
         assert tmp.status_code == 500
         app.ydl = ydl_tmp
 
     def test_youtubedl(self):
-        tmp = self.app.post("/", data=json.dumps(dict(
-            url="https://www.youtube.com/watch?v=Pfq8f59u3kk"
-        )), headers=self.headers)
+        tmp = self.download_youtube()
         assert tmp.status_code == 200
 
     def test_pushbullet_crash(self):
