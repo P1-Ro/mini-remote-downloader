@@ -40,7 +40,7 @@ class DownloaderTestCase(unittest.TestCase):
 
     def test_download_without_content_type(self):
         tmp = self.app.post("/", data=json.dumps(dict(
-            url="https://mrose.org/cc/png-test.png"
+            url="https://mrose.org"
         )), headers={
             "Authorization": "Basic VVNFUk5BTUU6UEFTU1dPUkQ="
         })

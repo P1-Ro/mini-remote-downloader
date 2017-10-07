@@ -99,7 +99,8 @@ def download_in_background(data):
     url = data["url"]
 
     if "name" in data:
-        file_extension = url.split("?")[0].split(".")[-1]
+        url_without_params = url.split("?")[0]
+        file_extension = url_without_params.split(".")[-1]
         name = data["name"] + "." + file_extension
     else:
         name = url.split("/")[-1]
