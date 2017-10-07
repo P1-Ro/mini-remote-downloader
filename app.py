@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 def load_conf():
     directory = os.path.dirname(os.path.abspath(__file__))
-    with open(directory + "\config.yml", 'r') as stream:
+    with open(os.path.join(directory, "\config.yml"), 'r') as stream:
         try:
             return yaml.safe_load(stream)
         except yaml.YAMLError as e:
