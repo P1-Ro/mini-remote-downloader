@@ -1,9 +1,11 @@
 from __future__ import print_function
+
+import os
+import sys
 import threading
 from functools import wraps
-import os
+
 import yaml
-import sys
 from flask import Flask, request, jsonify, Response
 from pip._vendor import requests
 
@@ -12,7 +14,7 @@ app = Flask(__name__)
 
 def load_conf():
     directory = os.path.dirname(os.path.abspath(__file__))
-    with open(directory+"\config.yml", 'r') as stream:
+    with open(directory + "\config2.yml", 'r') as stream:
         try:
             return yaml.safe_load(stream)
         except yaml.YAMLError as e:
@@ -30,7 +32,12 @@ except ImportError:
 
 
 def check_auth(username, password):
-    return username == conf["username"] and password == conf["password"]
+    users = conf["users"]
+    for user_settings in users:
+        if username == user_settings["username"] and password == user_settings["password"]:
+            return True
+
+    return False
 
 
 def authenticate():
@@ -53,12 +60,14 @@ def requires_auth(f):
 
 @app.route('/', methods=['POST'])
 @requires_auth
-def hello_world():
+def download():
     try:
         data = request.get_json()
 
         if data is None:
             raise Exception("Missing or wrong Content-Type, should be: application/json")
+
+        data["user"] = request.authorization.username
 
         if url_check(data["url"]):
             threading.Thread(target=lambda: download_in_background(data)).start()
@@ -69,11 +78,12 @@ def hello_world():
         return jsonify(result), 500
 
 
-def on_complete(filename):
-    if conf["notify_via_pushbullet"]:
+def on_complete(user, filename):
+    curr_user = filter(lambda person: person['username'] == user, conf["users"])[0]
+    if curr_user["notify_via_pushbullet"]:
         try:
             from pushbullet import Pushbullet
-            pb = Pushbullet(conf["pushbullet_token"])
+            pb = Pushbullet(curr_user["pushbullet_token"])
             pb.push_note("Download finished", filename)
             return True
         except ImportError:
@@ -105,13 +115,13 @@ def download_in_background(data):
         if ydl is not None:
             with ydl:
                 info = ydl.extract_info(url=url, download=True)
-                on_complete(info["title"])
+                on_complete(data["user"], info["title"])
 
     else:
         r = requests.get(url)
         with open(path, "wb+") as code:
             code.write(r.content)
-        on_complete(name)
+        on_complete(data["user"], name)
 
 
 def url_check(url):
