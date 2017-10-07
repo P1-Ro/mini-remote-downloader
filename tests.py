@@ -72,3 +72,5 @@ class DownloaderTestCase(unittest.TestCase):
         tmp = app.on_complete("USERNAME", "test")
         assert tmp is True
 
+if __name__ == "__main__":
+    unittest.main()
