@@ -1,9 +1,7 @@
 import json
-
-import youtube_dl
+import unittest
 
 import app
-import unittest
 
 
 class DownloaderTestCase(unittest.TestCase):
@@ -31,42 +29,51 @@ class DownloaderTestCase(unittest.TestCase):
         })
         assert tmp.status_code == 401
 
-    def test_download_without_content_type(self):
-        tmp = self.app.post("/", data=json.dumps(dict(
+    def wrong_download(self, headers):
+        return self.app.post("/", data=json.dumps(dict(
             url="https://mrose.org/cc/png-test.png"
-        )), headers={
+        )), headers=headers)
+
+    def test_download_with_wrong_auth(self):
+        tmp = self.wrong_download(headers={
+            "Authorization": "Basic VVNFUk5BTUUyOlBBU1NXT1JEMg==",
+            "Content-Type": "application/json"
+        })
+        assert tmp.status_code == 401
+
+    def test_download_without_content_type(self):
+        tmp = self.wrong_download(headers={
             "Authorization": "Basic VVNFUk5BTUU6UEFTU1dPUkQ="
         })
         assert tmp.status_code == 500
 
+    def download_youtube(self):
+        return self.app.post("/", data=json.dumps(dict(
+            url="https://www.youtube.com/watch?v=Pfq8f59u3kk"
+        )), headers=self.headers)
+
     def test_youtubedl_crash(self):
         ydl_tmp = app.ydl
         app.ydl = None
-        tmp = self.app.post("/", data=json.dumps(dict(
-            url="https://www.youtube.com/watch?v=Pfq8f59u3kk"
-        )), headers=self.headers)
+        tmp = self.download_youtube()
         assert tmp.status_code == 500
         app.ydl = ydl_tmp
 
     def test_youtubedl(self):
-        tmp = self.app.post("/", data=json.dumps(dict(
-            url="https://www.youtube.com/watch?v=Pfq8f59u3kk"
-        )), headers=self.headers)
+        tmp = self.download_youtube()
         assert tmp.status_code == 200
 
     def test_pushbullet_crash(self):
-        oldKey = app.conf["pushbullet_token"]
-        app.conf["pushbullet_token"] = "Invalid"
-        tmp = app.on_complete("test")
+        oldKey = app.conf["users"][0]["pushbullet_token"]
+        app.conf["users"][0]["pushbullet_token"] = "Invalid"
+        tmp = app.on_complete("USERNAME", "test")
         assert tmp is False
-        app.conf["pushbullet_token"] = oldKey
+        app.conf["users"][0]["pushbullet_token"] = oldKey
 
     def test_pushbullet(self):
-        app.notify_via_pushbullet = True
-        app.pushbullet_token = "o.sGzTGwxlOz16GGh2OwwjYpJnrRaciUNU"
-        tmp = app.on_complete("test")
+        tmp = app.on_complete("USERNAME", "test")
         assert tmp is True
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

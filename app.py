@@ -1,4 +1,5 @@
 from __future__ import print_function
+
 import threading
 from functools import wraps
 import os
@@ -11,8 +12,8 @@ app = Flask(__name__)
 
 
 def load_conf():
-    directory = os.path.dirname(os.path.abspath(__file__))
-    with open(directory + "\config.yml", 'r') as stream:
+    directory = os.path.split(os.path.realpath(__file__))[0]
+    with open(os.path.join(directory, "config.yml"), 'r') as stream:
         try:
             return yaml.safe_load(stream)
         except yaml.YAMLError as e:
@@ -30,7 +31,12 @@ except ImportError:
 
 
 def check_auth(username, password):
-    return username == conf["username"] and password == conf["password"]
+    users = conf["users"]
+    for user_settings in users:
+        if username == user_settings["username"] and password == user_settings["password"]:
+            return True
+
+    return False
 
 
 def authenticate():
@@ -66,6 +72,8 @@ def download():
         if data is None:
             raise Exception("Missing or wrong Content-Type, should be: application/json")
 
+        data["user"] = request.authorization.username
+
         if url_check(data["url"]):
             threading.Thread(target=lambda: download_in_background(data)).start()
             result = {"success": True}
@@ -75,11 +83,12 @@ def download():
         return jsonify(result), 500
 
 
-def on_complete(filename):
-    if conf["notify_via_pushbullet"]:
+def on_complete(user, filename):
+    curr_user = filter(lambda person: person['username'] == user, conf["users"])[0]
+    if curr_user["notify_via_pushbullet"]:
         try:
             from pushbullet import Pushbullet
-            pb = Pushbullet(conf["pushbullet_token"])
+            pb = Pushbullet(curr_user["pushbullet_token"])
             pb.push_note("Download finished", filename)
             return True
         except ImportError:
@@ -95,7 +104,8 @@ def download_in_background(data):
     url = data["url"]
 
     if "name" in data:
-        file_extension = url.split("?")[0].split(".")[-1]
+        url_without_params = url.split("?")[0]
+        file_extension = url_without_params.split(".")[-1]
         name = data["name"] + "." + file_extension
     else:
         name = url.split("/")[-1]
@@ -111,13 +121,13 @@ def download_in_background(data):
         if ydl is not None:
             with ydl:
                 info = ydl.extract_info(url=url, download=True)
-                on_complete(info["title"])
+                on_complete(data["user"], info["title"])
 
     else:
         r = requests.get(url)
         with open(path, "wb+") as code:
             code.write(r.content)
-        on_complete(name)
+        on_complete(data["user"], name)
 
 
 def url_check(url):
