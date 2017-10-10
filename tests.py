@@ -8,6 +8,7 @@ import app
 
 
 class DownloaderTestCase(unittest.TestCase):
+
     def setUp(self):
         app.app.testing = True
         self.app = app.app.test_client()
@@ -15,9 +16,12 @@ class DownloaderTestCase(unittest.TestCase):
             "Authorization": "Basic VVNFUk5BTUU6UEFTU1dPUkQ=",
             "Content-Type": "application/json"
         }
-        path = app.conf["path"] + "test"
-        if os.path.exists(path):
-            shutil.rmtree(path)
+
+    def test_invalid_url(self):
+        tmp = self.app.post("/download/", data=json.dumps(dict(
+            url="https://mrose"
+        )), headers=self.headers)
+        assert tmp.status_code == 500
 
     def test_landing_page(self):
         tmp = self.app.get("/", headers=self.headers)
