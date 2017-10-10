@@ -4,7 +4,7 @@ from functools import wraps
 import os
 import yaml
 import sys
-from flask import Flask, request, jsonify, Response
+from flask import Flask, request, jsonify, Response, render_template
 from pip._vendor import requests
 
 app = Flask(__name__)
@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 def load_conf():
     directory = os.path.dirname(os.path.abspath(__file__))
-    with open(directory+"\config.yml", 'r') as stream:
+    with open(directory + "\config.yml", 'r') as stream:
         try:
             return yaml.safe_load(stream)
         except yaml.YAMLError as e:
@@ -51,9 +51,15 @@ def requires_auth(f):
     return decorated
 
 
-@app.route('/', methods=['POST'])
+@app.route('/')
 @requires_auth
-def hello_world():
+def login_page():
+    return render_template('index.html')
+
+
+@app.route('/download/', methods=['POST'])
+@requires_auth
+def download():
     try:
         data = request.get_json()
 

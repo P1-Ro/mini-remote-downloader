@@ -1,0 +1,47 @@
+body {
+background: #114357;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #F29492, #114357);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #F29492, #114357); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+
+/*background: #4DA0B0;  !* fallback for old browsers *!*/
+/*background: -webkit-linear-gradient(to right, #D39D38, #4DA0B0);  !* Chrome 10-25, Safari 5.1-6 *!*/
+/*background: linear-gradient(to right, #D39D38, #4DA0B0); !* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ *!*/
+
+
+}
+
+.download {
+    float: right;
+    width: 200px;
+}
+
+.optional,
+.input-field .prefix {
+    color: #9e9e9e;
+}
+
+.container {
+    margin-top: 10vh;
+}
+
+em {
+    font-weight: bold;
+    color: white;
+}
+
+.nav-wrapper .brand-logo {
+    padding-left: 1rem;
+}
+
+.download{
+
+}
+
+.download-error{
+    background-color: red;
+}
+
+.download-success{
+    background-color: red;
+}
