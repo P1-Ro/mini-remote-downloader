@@ -1,14 +1,10 @@
 import json
-import shutil
 import unittest
-
-import os
 
 import app
 
 
 class DownloaderTestCase(unittest.TestCase):
-
     def setUp(self):
         app.app.testing = True
         self.app = app.app.test_client()
@@ -17,10 +13,13 @@ class DownloaderTestCase(unittest.TestCase):
             "Content-Type": "application/json"
         }
 
+    def make_request(self, data):
+        return self.app.post("/download/", data=json.dumps(data), headers=self.headers)
+
     def test_invalid_url(self):
-        tmp = self.app.post("/download/", data=json.dumps(dict(
+        tmp = self.make_request(dict(
             url="https://mrose"
-        )), headers=self.headers)
+        ))
         assert tmp.status_code == 500
 
     def test_landing_page(self):
@@ -28,11 +27,11 @@ class DownloaderTestCase(unittest.TestCase):
         assert tmp.status_code == 200
 
     def test_general_download(self):
-        tmp = self.app.post("/download/", data=json.dumps(dict(
+        tmp = self.make_request(dict(
             url="https://mrose.org/cc/png-test.png",
             name="test",
             category="test"
-        )), headers=self.headers)
+        ))
         assert tmp.status_code == 200
 
     def test_download_without_auth(self):
