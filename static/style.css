@@ -22,7 +22,7 @@ background: linear-gradient(to right, #F29492, #114357); /* W3C, IE 10+/ Edge, F
 }
 
 .container {
-    margin-top: 10vh;
+    margin-top: 15vh;
 }
 
 em {
@@ -32,16 +32,9 @@ em {
 
 .nav-wrapper .brand-logo {
     padding-left: 1rem;
+    width: fit-content;
 }
 
 .download{
-
-}
-
-.download-error{
-    background-color: red;
-}
-
-.download-success{
-    background-color: red;
+    width: fit-content;
 }

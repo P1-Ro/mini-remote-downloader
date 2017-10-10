@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Mini Remote Downloader</title>
-     <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Roboto" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Roboto" rel="stylesheet">
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
@@ -14,7 +14,7 @@
 <nav>
     <div class="nav-wrapper blue-grey darken-4">
 
-        <div class="brand-logo">  <i class="material-icons prefix">file_download</i> Mini Remote Downloader</div>
+        <div class="brand-logo"><i class="material-icons prefix">file_download</i> Mini Remote Downloader</div>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li><a href="https://github.com/P1-Ro/mini-remote-downloader">Github repo</a></li>
         </ul>
@@ -23,37 +23,40 @@
 
 <div class="container">
     <div class="card-panel blue-grey darken-3">
-            <form class="col s12">
-                <div class="row">
+        <form class="col s12">
+            <div class="row">
 
-                    <div class="input-field">
+                <div class="input-field">
 
-                        <i class="material-icons prefix">language</i>
-                        <input type="text" id="url" name="url" required class="validate">
-                        <label for="url">Url</label>
-                    </div>
-
-                    <div class="input-field">
-                        <i class="material-icons prefix">label</i>
-                        <input type="text" id="name" name="name">
-                        <label for="name">Name<em>*</em></label>
-                    </div>
-
-                    <div class="input-field">
-                        <i class="material-icons prefix">perm_media</i>
-                        <input type="text" id="cat" name="category">
-                        <label for="cat">Category<em>*</em></label>
-                    </div>
-
+                    <i class="material-icons prefix">language</i>
+                    <input id="url" name="url" required class="validate">
+                    <label for="url">Url</label>
                 </div>
 
-                <div class="row">
-                    <span class="optional">* - optional</span>
-                    <button type="submit" id="submit" class="btn btn-success download  blue-grey lighten-1">Download</button>
+                <div class="input-field">
+                    <i class="material-icons prefix">label</i>
+                    <input id="name" name="name">
+                    <label for="name">Name<em>*</em></label>
                 </div>
-            </form>
+
+                <div class="input-field">
+                    <i class="material-icons prefix">perm_media</i>
+                    <input id="cat" name="category">
+                    <label for="cat">Category<em>*</em></label>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <span class="optional">* - optional</span>
+
+
+                <button id="submit" class="btn download  blue-grey lighten-1 waves-effect waves-light">Download
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 </body>
-    <script src="{{ url_for('static', filename='index.js') }}"></script>
+<script src="{{ url_for('static', filename='index.js') }}"></script>
 </html>
