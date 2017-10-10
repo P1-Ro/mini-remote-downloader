@@ -124,12 +124,9 @@ def download_in_background(data):
 
     else:
         r = requests.get(url)
-        try:
-            with open(path, "wb+") as code:
-                code.write(r.content)
-            on_complete(data["user"], name)
-        except IOError:
-            return False
+        with open(path, "wb+") as code:
+            code.write(r.content)
+        on_complete(data["user"], name)
     return True
 
 
