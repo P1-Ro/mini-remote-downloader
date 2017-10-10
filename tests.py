@@ -1,5 +1,8 @@
 import json
+import shutil
 import unittest
+
+import os
 
 import app
 
@@ -12,6 +15,9 @@ class DownloaderTestCase(unittest.TestCase):
             "Authorization": "Basic VVNFUk5BTUU6UEFTU1dPUkQ=",
             "Content-Type": "application/json"
         }
+        path = app.conf["path"] + "test"
+        if os.path.exists(path):
+            shutil.rmtree(path)
 
     def test_landing_page(self):
         tmp = self.app.get("/", headers=self.headers)
@@ -20,7 +26,7 @@ class DownloaderTestCase(unittest.TestCase):
     def test_general_download(self):
         tmp = self.app.post("/download/", data=json.dumps(dict(
             url="https://mrose.org/cc/png-test.png",
-            name="test png",
+            name="test",
             category="test"
         )), headers=self.headers)
         assert tmp.status_code == 200
@@ -51,21 +57,20 @@ class DownloaderTestCase(unittest.TestCase):
         })
         assert tmp.status_code == 500
 
-    def download_youtube(self):
-        return self.app.post("/download/", data=json.dumps(dict(
-            url="https://www.youtube.com/watch?v=Pfq8f59u3kk"
-        )), headers=self.headers)
-
     def test_youtubedl_crash(self):
         ydl_tmp = app.ydl
         app.ydl = None
-        tmp = self.download_youtube()
+        tmp = self.app.post("/download/", data=json.dumps(dict(
+            url="https://www.youtube.com/watch?v=Pfq8f59u3kk"
+        )), headers=self.headers)
         assert tmp.status_code == 500
         app.ydl = ydl_tmp
 
     def test_youtubedl(self):
-        tmp = self.download_youtube()
-        assert tmp.status_code == 200
+        data = {"url": "https://www.youtube.com/watch?v=Pfq8f59u3kk",
+                "user": "USERNAME"}
+        res = app.download_in_background(data)
+        assert res
 
     def test_pushbullet_crash(self):
         oldKey = app.conf["users"][0]["pushbullet_token"]
