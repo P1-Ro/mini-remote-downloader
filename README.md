@@ -35,7 +35,7 @@ Here is screenshot:
 ![Screenshot of web interface](https://github.com/P1-Ro/mini-remote-downloader/blob/master/screenshot.png)
 
 ### Request
-To start downloading simply make `POST` request on `http://{SERVER_ADDRESS}/download/` with JSON looking like this:
+To start downloading simply make `POST` request on `http://{SERVER_ADDRESS}/download/` with JSON which looks like this:
 ```
 {
     "url": "http://example.com",     // url to be downloaded
@@ -43,7 +43,7 @@ To start downloading simply make `POST` request on `http://{SERVER_ADDRESS}/down
     "category": "example" [optional] // subfolder in downloads folder
 }
 ``` 
-And also use `Authorization` header with same `USERNAME` and `PASSWORD` you set in `app.py` , otherwise you will get **`401 Unathorized`** response
+And also use `Authorization` header with same `USERNAME` and `PASSWORD` you set in `confix.yml` , otherwise you will get **`401 Unathorized`** response
 
 If dowloading started successfully Status code **`200`** will be returned, otherwise Status code will be **`500`** with actual error message in `JSON`.
 
