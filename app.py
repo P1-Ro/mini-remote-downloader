@@ -1,10 +1,11 @@
 from __future__ import print_function
 
+import os
+import sys
 import threading
 from functools import wraps
-import os
+
 import yaml
-import sys
 from flask import Flask, request, jsonify, Response, render_template
 from pip._vendor import requests
 
@@ -68,10 +69,8 @@ def login_page():
 def download():
     try:
         data = request.get_json()
-
         if data is None:
             raise Exception("Missing or wrong Content-Type, should be: application/json")
-
         data["user"] = request.authorization.username
 
         if url_check(data["url"]):
@@ -111,11 +110,11 @@ def download_in_background(data):
         name = url.split("/")[-1]
 
     if "category" in data:
-        path = conf["path"] + data["category"] + "/" + name
+        path = os.path.join(conf["path"], data["category"], name)
         if not os.path.exists(path):
             os.makedirs(os.path.dirname(path))
     else:
-        path = conf["path"] + name
+        path = os.path.join(conf["path"], name)
 
     if "youtube" in url or "oload" in url:
         if ydl is not None:
@@ -125,13 +124,21 @@ def download_in_background(data):
 
     else:
         r = requests.get(url)
-        with open(path, "wb+") as code:
-            code.write(r.content)
-        on_complete(data["user"], name)
+        try:
+            with open(path, "wb+") as code:
+                code.write(r.content)
+            on_complete(data["user"], name)
+        except IOError:
+            return False
+    return True
 
 
 def url_check(url):
-    req = requests.get(url)
+    try:
+        req = requests.get(url)
+    except requests.ConnectionError:
+        raise Exception("Invalid or malformed URL")
+
     if "youtube" in url or "oload" in url:
         if ydl is None:
             raise Exception("Trying to download from Youtube/Openload without youtube-dl library")
