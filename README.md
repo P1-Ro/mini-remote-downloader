@@ -25,7 +25,17 @@ It is protected by `Basic Auth` and each user can be notified individually.
     ```
     
 ## Usage
-To start downloading simply make `POST` request on server with JSON looking like this:
+
+You can use included web interface or via `POST` request.
+
+### Web Interface
+Navigate your browser to `http://{SERVER_ADDRESS}`, browser will ask you for username and password. After login you can start downloading.
+Here is screenshot: 
+
+![Screenshot of web interface](https://github.com/P1-Ro/mini-remote-downloader/blob/master/screenshot.png)
+
+### Request
+To start downloading simply make `POST` request on `http://{SERVER_ADDRESS}/download/` with JSON looking like this:
 ```
 {
     "url": "http://example.com",     // url to be downloaded
