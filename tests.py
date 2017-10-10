@@ -13,8 +13,12 @@ class DownloaderTestCase(unittest.TestCase):
             "Content-Type": "application/json"
         }
 
+    def test_landing_page(self):
+        tmp = self.app.get("/", headers=self.headers)
+        assert tmp.status_code == 200
+
     def test_general_download(self):
-        tmp = self.app.post("/", data=json.dumps(dict(
+        tmp = self.app.post("/download/", data=json.dumps(dict(
             url="https://mrose.org/cc/png-test.png",
             name="test png",
             category="test"
@@ -22,7 +26,7 @@ class DownloaderTestCase(unittest.TestCase):
         assert tmp.status_code == 200
 
     def test_download_without_auth(self):
-        tmp = self.app.post("/", data=json.dumps(dict(
+        tmp = self.app.post("/download/", data=json.dumps(dict(
             url="https://mrose.org/cc/png-test.png"
         )), headers={
             "Content-Type": "application/json"
@@ -30,7 +34,7 @@ class DownloaderTestCase(unittest.TestCase):
         assert tmp.status_code == 401
 
     def wrong_download(self, headers):
-        return self.app.post("/", data=json.dumps(dict(
+        return self.app.post("/download/", data=json.dumps(dict(
             url="https://mrose.org/cc/png-test.png"
         )), headers=headers)
 
@@ -48,7 +52,7 @@ class DownloaderTestCase(unittest.TestCase):
         assert tmp.status_code == 500
 
     def download_youtube(self):
-        return self.app.post("/", data=json.dumps(dict(
+        return self.app.post("/download/", data=json.dumps(dict(
             url="https://www.youtube.com/watch?v=Pfq8f59u3kk"
         )), headers=self.headers)
 
