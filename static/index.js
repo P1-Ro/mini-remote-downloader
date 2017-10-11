@@ -3,6 +3,9 @@ Materialize
 */
 (function () {
     $(document).on("submit", "form", function (evt) {
+        const spinner = $(".ultra-small");
+        const button = $("#submit")[0];
+        button.disabled = true;
 
         evt.stopPropagation();
         evt.preventDefault();
@@ -20,6 +23,8 @@ Materialize
             data["category"] = cat;
         }
 
+        spinner.removeClass("hide");
+
         $.ajax({
             url: "/download/",
             type: "POST",
@@ -28,8 +33,12 @@ Materialize
             data: JSON.stringify(data)
         }).done(function () {
             Materialize.toast("File started downloading", 5000, "download green");
+            spinner.addClass("hide");
+            button.disabled = false;
         }).fail(function (res) {
             Materialize.toast(res.responseJSON.reason, 5000, "download red");
+            spinner.addClass("hide");
+            button.disabled = false;
         });
     });
 }).call();

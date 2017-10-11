@@ -14,7 +14,7 @@
 <nav>
     <div class="nav-wrapper blue-grey darken-4">
 
-        <div class="brand-logo"><i class="material-icons prefix">file_download</i> Mini Remote Downloader</div>
+        <div class="brand-logo">Mini Remote Downloader</div>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li><a href="https://github.com/P1-Ro/mini-remote-downloader">Github repo</a></li>
         </ul>
@@ -23,11 +23,10 @@
 
 <div class="container">
     <div class="card-panel blue-grey darken-3">
-        <form class="col s12">
+        <form>
             <div class="row">
 
                 <div class="input-field">
-
                     <i class="material-icons prefix">language</i>
                     <input type="text" id="url" name="url" required class="validate" spellcheck="false">
                     <label for="url">Url</label>
@@ -50,9 +49,24 @@
             <div class="row">
                 <span class="optional">* - optional</span>
 
-
-                <button id="submit" class="btn download  blue-grey lighten-1 waves-effect waves-light">Download
+                <button id="submit" class="btn blue-grey lighten-1 waves-effect waves-light">
+                    <i class="material-icons right">file_download</i>Download
                 </button>
+
+                <div class="preloader-wrapper ultra-small hide active">
+                    <div class="spinner-layer">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="gap-patch">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </form>
     </div>

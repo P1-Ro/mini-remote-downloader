@@ -1,17 +1,24 @@
 body {
-background: #114357;
-background: -webkit-linear-gradient(to right, #F29492, #114357);
-background: linear-gradient(to right, #F29492, #114357);
+    background: #114357;
+    background: -webkit-linear-gradient(to right, #F29492, #114357);
+    background: linear-gradient(to right, #F29492, #114357);
 }
 
-.download {
+.btn {
     float: right;
-    width: 200px;
 }
 
 .optional,
 .input-field .prefix {
     color: #9e9e9e;
+}
+
+.input-field {
+    margin-bottom: 2rem;
+}
+
+.row {
+    margin-bottom: 0;
 }
 
 .container {
@@ -24,14 +31,34 @@ em {
 }
 
 .nav-wrapper .brand-logo {
-    padding-left: 1rem;
+    padding-left: 3rem;
     width: fit-content;
 }
 
-.download{
+.nav-wrapper a {
+    padding-right: 3em;
+}
+
+.download {
     width: fit-content;
 }
 
-input{
+input {
     color: white;
+}
+
+.card-panel {
+    padding: 2rem 3rem;
+}
+
+.ultra-small {
+    float: right;
+    width: 20px;
+    height: 20px;
+    margin-top: 0.5rem;
+    margin-right: 1rem;
+}
+
+.ultra-small .spinner-layer{
+    border-color: #78909c;
 }
