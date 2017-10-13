@@ -1,7 +1,7 @@
 body {
-    background: #114357;
-    background: -webkit-linear-gradient(to right, #F29492, #114357);
-    background: linear-gradient(to right, #F29492, #114357);
+    background: #70e1f5;
+    background: -webkit-linear-gradient(to right, #ffd194, #70e1f5);
+    background: linear-gradient(to right, #ffd194, #70e1f5);
 }
 
 .btn {
