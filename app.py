@@ -1,13 +1,14 @@
 from __future__ import print_function
 
+import mimetypes
 import os
 import sys
 import threading
 from functools import wraps
 
+import requests
 import yaml
 from flask import Flask, request, jsonify, Response, render_template
-from pip._vendor import requests
 
 app = Flask(__name__)
 
@@ -26,9 +27,9 @@ conf = load_conf()
 try:
     import youtube_dl
 
-    ydl = youtube_dl.YoutubeDL({"outtmpl": conf["path"] + "%(title)s.%(ext)s"})
+    ydl_installed = True
 except ImportError:
-    ydl = None
+    ydl_installed = False
 
 
 def check_auth(username, password):
@@ -73,10 +74,12 @@ def download():
             raise Exception("Missing or wrong Content-Type, should be: application/json")
         data["user"] = request.authorization.username
 
-        if url_check(data["url"]):
-            threading.Thread(target=lambda: download_in_background(data)).start()
-            result = {"success": True}
-            return jsonify(result)
+        extension = get_extension(data["url"])
+        data["extension"] = extension
+
+        threading.Thread(target=lambda: download_in_background(data)).start()
+        result = {"success": True}
+        return jsonify(result)
     except Exception as e:
         result = {"error": True, "reason": str(e)}
         return jsonify(result), 500
@@ -102,25 +105,36 @@ def on_complete(user, filename):
 def download_in_background(data):
     url = data["url"]
 
+    name = ""
     if "name" in data:
-        url_without_params = url.split("?")[0]
-        file_extension = url_without_params.split(".")[-1]
-        name = data["name"] + "." + file_extension
-    else:
-        name = url.split("/")[-1]
+        name = data["name"] + "." + data["extension"]
+    elif "youtube" not in url and "oload" not in url:
+        name = url.split("/")[-1] + "." + data["extension"]
 
     if "category" in data:
-        path = os.path.join(conf["path"], data["category"], name)
+        path = os.path.join(conf["path"], data["category"])
         if not os.path.exists(path):
             os.makedirs(os.path.dirname(path))
+        path = os.path.join(path, name)
     else:
         path = os.path.join(conf["path"], name)
 
-    if "youtube" in url or "oload" in url:
-        if ydl is not None:
-            with ydl:
-                info = ydl.extract_info(url=url, download=True)
-                on_complete(data["user"], info["title"])
+    if ("youtube" in url or "oload" in url) and ydl_installed:
+
+        if name:
+            out_tmpl = path
+        else:
+            out_tmpl = os.path.join(path, "%(title)s.%(ext)s")
+
+        ydl_options = {
+            # Download best mp4 format available or any other best if no mp4 available
+            "format": "best[ext=mp4]/best",
+            "outtmpl": out_tmpl
+        }
+        ydl = youtube_dl.YoutubeDL(ydl_options)
+        with ydl:
+            info = ydl.extract_info(url=url, download=True)
+            on_complete(data["user"], info["title"])
 
     else:
         r = requests.get(url)
@@ -130,17 +144,24 @@ def download_in_background(data):
     return True
 
 
-def url_check(url):
+def get_extension(url):
     try:
-        req = requests.get(url)
+        res = requests.get(url)
+        content_type = res.headers['content-type']
+        extension = mimetypes.guess_extension(content_type)
+        if not extension:
+            extension = ""
+
     except requests.ConnectionError:
         raise Exception("Invalid or malformed URL")
 
     if "youtube" in url or "oload" in url:
-        if ydl is None:
+        extension = "mp4"
+        if not ydl_installed:
             raise Exception("Trying to download from Youtube/Openload without youtube-dl library")
-    return req.status_code == 200
+
+    return extension
 
 
 if __name__ == '__main__':
-    app.run(port=9000)
+    app.run(host="0.0.0.0", port=9000)
