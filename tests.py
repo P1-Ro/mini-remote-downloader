@@ -61,13 +61,12 @@ class DownloaderTestCase(unittest.TestCase):
         assert tmp.status_code == 500
 
     def test_youtubedl_crash(self):
-        ydl_tmp = app.ydl
-        app.ydl = None
+        app.ydl_installed = False
         tmp = self.app.post("/download/", data=json.dumps(dict(
             url="https://www.youtube.com/watch?v=Pfq8f59u3kk"
         )), headers=self.headers)
         assert tmp.status_code == 500
-        app.ydl = ydl_tmp
+        app.ydl_installed = True
 
     def test_youtubedl(self):
         data = {"url": "https://www.youtube.com/watch?v=Pfq8f59u3kk",
