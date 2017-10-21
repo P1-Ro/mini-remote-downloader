@@ -30,7 +30,16 @@
                     <i class="material-icons prefix">language</i>
                     <input type="url" id="url" name="url" required class="validate" spellcheck="false">
                     <label for="url" data-error="Not a valid url">Url</label>
+
                 </div>
+
+                <div id="audioOnly" style="opacity: 0; position: relative;">
+
+                        <input class="with-gap" name="youtubeFormat" type="checkbox" id="audio"/>
+                        <label class="format" for="audio">Download only audio</label>
+
+                </div>
+
 
                 <div class="input-field">
                     <i class="material-icons prefix">label</i>
@@ -47,7 +56,7 @@
             </div>
 
             <div class="row">
-                <span class="optional">* - optional</span>
+                <span class="text">* - optional</span>
 
                 <button id="submit" class="btn blue-grey lighten-1 waves-effect waves-light">
                     <i class="material-icons right">file_download</i>Download
