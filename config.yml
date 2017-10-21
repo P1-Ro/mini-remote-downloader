@@ -1,5 +1,14 @@
 ---
+# Path where to store downloads
 path: PATH
+
+# Codec for audio files
+# Currently supported codecs:  aac, flac, mp3, m4a, opus, vorbis, or wav
+audio_codec: CODEC
+
+# Bitrate for audio files
+audio_kbps: 320
+
 users:
     - username: USERNAME
       password: PASSWORD
