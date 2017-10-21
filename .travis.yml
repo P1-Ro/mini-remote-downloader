@@ -9,7 +9,7 @@ install:
 - sudo apt-get -qq update
 - pip install -r requirements.txt
 - pip install codecov youtube-dl pushbullet.py
-- sudo apt-get install -y ffmpeg
+- sudo apt-get install libav-tools
 script:
 - coverage run tests.py
 after_success:
