@@ -16,7 +16,7 @@ app = Flask(__name__)
 
 def load_conf():
     directory = os.path.split(os.path.realpath(__file__))[0]
-    with open(os.path.join(directory, "config2.yml"), "r") as stream:
+    with open(os.path.join(directory, "config.yml"), "r") as stream:
         try:
             return yaml.safe_load(stream)
         except yaml.YAMLError as e:
@@ -164,8 +164,6 @@ def get_extension(url):
             res = requests.get(url)
             content_type = res.headers['content-type']
             extension = mimetypes.guess_extension(content_type)
-            if not extension:
-                extension = ""
 
         except requests.ConnectionError:
             raise Exception("Invalid or malformed URL")

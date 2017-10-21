@@ -2,7 +2,7 @@
 A simple web app to help you download files on server, it's like a proxyed downloader, useful when certain sites are blocked or you just want download files at home wherever you are.
 Built with as little dependecies as possible.
 
-**Optionally** supports downloading from [Youtube](http://youtube.com)/[Openload](https://openload.co/) and sending notification via [PushBullet](https://www.pushbullet.com).
+**Optionally** supports downloading video or audio from [Youtube](http://youtube.com)/[Openload](https://openload.co/) and sending notification via [PushBullet](https://www.pushbullet.com).
 It is protected by `Basic Auth` and each user can be notified individually.
 
 ## Deploy
@@ -41,6 +41,7 @@ To start downloading simply make `POST` request on `http://{SERVER_ADDRESS}/down
     "url": "http://example.com",     // url to be downloaded
     "name": "example" [optional],    // new name of downloaded file
     "category": "example" [optional] // subfolder in downloads folder
+    "audioOnly": true [optional]     // if you want to download only audio from Youtube
 }
 ``` 
 And also use `Authorization` header with same `USERNAME` and `PASSWORD` you set in `confix.yml` , otherwise you will get **`401 Unathorized`** response
@@ -50,18 +51,24 @@ If dowloading started successfully Status code **`200`** will be returned, other
 ## Optional
 
 ### Enable downloading from Youtube and Openload
-If you want to be able download videos from youtube you need to perform these 2 steps.
+If you want to be able download videos from youtube you need to perform these steps.
 
  1) Install youtube-dl
  ```
  pip install youtube-dl
  ```
- 2) Install PhantomJs
+ 2) _[Optional]_ Install PhantomJs if you want to download from Openload:
     
     [Instalation for Linux](https://gist.github.com/julionc/7476620)
     
     [Instalation for Windows](https://www.joecolantonio.com/2014/10/14/how-to-install-phantomjs/)
     
+ 3) _[Optional]_ Install [FFmpeg](https://www.ffmpeg.org/) if you want to download mp3 from Youtube
+ 
+    [Instalation guid for Linux and Windows](https://github.com/adaptlearning/adapt_authoring/wiki/Installing-FFmpeg)
+   
+ 
+ 
  ### Enable notifications via PushBullet
  If you want also get notification on your mobile phone or PC after download is complete perform these steps.
  
