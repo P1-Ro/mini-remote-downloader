@@ -172,4 +172,4 @@ def get_extension(url):
 
 
 if __name__ == '__main__':
-    app.run(host="::", port=9000, debug=True)
+    app.run(host="::", port=9000)

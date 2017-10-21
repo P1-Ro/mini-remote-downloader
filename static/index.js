@@ -16,6 +16,19 @@ Materialize
         audioOnlyVisible = false;
     }
 
+    function enableButton(spinner, button) {
+        spinner.addClass("hide");
+        button.disabled = false;
+    }
+
+    function clearForm(url, name, cat, chckbx) {
+        url.val("");
+        name.val("");
+        cat.val("");
+        chckbx.prop("checked", false);
+        resetAudioCheckBox();
+    }
+
     url.on("input", function () {
         let val = url.val();
         if (val.indexOf("youtu") !== -1 && !audioOnlyVisible) {
@@ -58,7 +71,7 @@ Materialize
         if (cat) {
             data["category"] = cat;
         }
-        if(audio){
+        if (audio) {
             data["audioOnly"] = true;
         }
 
@@ -82,16 +95,4 @@ Materialize
         });
     });
 
-    function enableButton(spinner, button) {
-        spinner.addClass("hide");
-        button.disabled = false;
-    }
-
-    function clearForm(url, name, cat, chckbx) {
-        url.val("");
-        name.val("");
-        cat.val("");
-        chckbx.prop("checked", false);
-        resetAudioCheckBox();
-    }
 }).call();
