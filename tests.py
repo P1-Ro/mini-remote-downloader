@@ -28,7 +28,7 @@ class DownloaderTestCase(unittest.TestCase):
 
     def test_general_download(self):
         tmp = self.make_request(dict(
-            url="https://mrose.org/cc/png-test.png",
+            url="http://theglow666.6f.sk/image_test/",
             name="test",
             category="test"
         ))
