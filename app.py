@@ -6,6 +6,8 @@ import os
 import sys
 import threading
 from functools import wraps
+from urlparse import urlparse
+from os.path import splitext
 
 import requests
 import yaml
@@ -113,9 +115,10 @@ def download_in_background(data):
         name = url.split("/")[-1] + data["extension"]
 
     if "category" in data:
-        path = os.path.join(conf["path"], data["category"], name)
+        path = os.path.join(conf["path"], data["category"])
         if not os.path.exists(path):
-            os.makedirs(os.path.dirname(path))
+            os.makedirs(path)
+        path = os.path.join(path, name)
     else:
         path = os.path.join(conf["path"], name)
 
@@ -154,21 +157,41 @@ def download_in_background(data):
     return True
 
 
-def get_extension(url):
-    if "youtube" in url or "oload" in url:
-        extension = ".mp4"
-        if not ydl_installed:
-            raise Exception("Trying to download from Youtube/Openload without youtube-dl library")
-    else:
-        try:
-            res = requests.get(url)
-            content_type = res.headers['content-type']
-            extension = mimetypes.guess_extension(content_type)
+def already_has_extension(url):
+    parsed = urlparse(url)
+    ext = splitext(parsed.path)[1]
+    return len(ext) != 0
 
-        except requests.ConnectionError:
-            raise Exception("Invalid or malformed URL")
+
+def get_extension(url):
+
+    if not already_has_extension(url):
+        if is_streaming_site(url):
+            extension = ".mp4"
+            if not ydl_installed:
+                raise Exception("Trying to download from Youtube/Openload without youtube-dl library")
+        else:
+            try:
+                res = requests.get(url)
+                content_type = res.headers['content-type']
+                extension = mimetypes.guess_extension(content_type)
+
+            except requests.ConnectionError:
+                raise Exception("Invalid or malformed URL")
+    else:
+        extension = ""
 
     return extension
+
+
+def is_streaming_site(url):
+    video_urls = ["oload", "openload", "youtube", "youtu"]
+
+    for site in video_urls:
+        if site in url:
+            return True
+
+    return False
 
 
 if __name__ == '__main__':
