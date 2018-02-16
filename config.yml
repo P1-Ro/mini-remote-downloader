@@ -9,6 +9,9 @@ audio_codec: CODEC
 # Bitrate for audio files
 audio_kbps: 320
 
+# Allow access without login on local network
+local_network_without_login: True
+
 users:
     - username: USERNAME
       password: PASSWORD

@@ -3,17 +3,31 @@ from __future__ import unicode_literals
 
 import mimetypes
 import os
+import socket
 import sys
 import threading
 from functools import wraps
-from urlparse import urlparse
 from os.path import splitext
+from urllib.parse import urlparse
 
 import requests
 import yaml
 from flask import Flask, request, jsonify, Response, render_template
 
 app = Flask(__name__)
+
+
+def get_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(('8.8.8.8', 1))
+        IP = '.'.join(s.getsockname()[0].split(".")[0:-1])
+    except:
+        IP = '192.168.0'
+    finally:
+        s.close()
+
+    return IP
 
 
 def load_conf():
@@ -26,6 +40,7 @@ def load_conf():
 
 
 conf = load_conf()
+allowed_ip_prefix = get_ip()
 
 try:
     import youtube_dl
@@ -44,6 +59,10 @@ def check_auth(username, password):
     return False
 
 
+def is_allowed_ip(ip):
+    return conf["local_network_without_login"] and ip.startswith(allowed_ip_prefix) or ip == "127.0.0.1"
+
+
 def authenticate():
     return Response(
         'Could not verify your access level for that URL.\n'
@@ -55,8 +74,10 @@ def requires_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         auth = request.authorization
-        if not auth or not check_auth(auth.username, auth.password):
-            return authenticate()
+        ip = request.remote_addr
+        if not is_allowed_ip(ip):
+            if not auth or not check_auth(auth.username, auth.password):
+                return authenticate()
         return f(*args, **kwargs)
 
     return decorated
@@ -75,7 +96,7 @@ def download():
         data = request.get_json()
         if data is None:
             raise Exception("Missing or wrong Content-Type, should be: application/json")
-        data["user"] = request.authorization.username
+        data["user"] = request.authorization.username if (request.authorization is not None) else None
 
         extension = get_extension(data["url"])
         data["extension"] = extension
@@ -89,7 +110,9 @@ def download():
 
 
 def on_complete(user, filename):
-    curr_user = filter(lambda person: person['username'] == user, conf["users"])[0]
+    if not user:
+        return
+    curr_user = next(filter(lambda person: person['username'] == user, conf["users"]))
     if curr_user["notify_via_pushbullet"]:
         try:
             from pushbullet import Pushbullet
@@ -195,4 +218,4 @@ def is_streaming_site(url):
 
 
 if __name__ == '__main__':
-    app.run(host="::", port=9000)
+    app.run(host="0.0.0.0", port=9000)
