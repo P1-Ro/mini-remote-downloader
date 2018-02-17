@@ -60,7 +60,7 @@ def check_auth(username, password):
 
 
 def is_allowed_ip(ip):
-    return conf["local_network_without_login"] and ip.startswith(allowed_ip_prefix) or ip == "127.0.0.1"
+    return conf["local_network_without_login"] and (ip.startswith(allowed_ip_prefix) or ip == "127.0.0.1")
 
 
 def authenticate():
