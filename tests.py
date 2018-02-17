@@ -41,12 +41,23 @@ class DownloaderTestCase(unittest.TestCase):
         ))
         assert tmp.status_code == 200
 
-    def test_download_without_auth(self):
+    def test_download_without_auth_local(self):
         tmp = self.app.post("/download/", data=json.dumps(dict(
             url="https://mrose.org/cc/png-test.png"
         )), headers={
             "Content-Type": "application/json"
         })
+        assert tmp.status_code == 200
+
+    def test_download_without_auth_remote(self):
+        old = app.conf["local_network_without_login"]
+        app.conf["local_network_without_login"] = False
+        tmp = self.app.post("/download/", data=json.dumps(dict(
+            url="https://mrose.org/cc/png-test.png"
+        )), headers={
+            "Content-Type": "application/json"
+        })
+        app.conf["local_network_without_login"] = old
         assert tmp.status_code == 401
 
     def wrong_download(self, headers):
@@ -55,10 +66,13 @@ class DownloaderTestCase(unittest.TestCase):
         )), headers=headers)
 
     def test_download_with_wrong_auth(self):
+        old = app.conf["local_network_without_login"]
+        app.conf["local_network_without_login"] = False
         tmp = self.wrong_download(headers={
             "Authorization": "Basic VVNFUk5BTUUyOlBBU1NXT1JEMg==",
             "Content-Type": "application/json"
         })
+        app.conf["local_network_without_login"] = old
         assert tmp.status_code == 401
 
     def test_download_without_content_type(self):
