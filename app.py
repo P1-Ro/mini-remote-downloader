@@ -8,6 +8,8 @@ import sys
 import threading
 from functools import wraps
 from os.path import splitext
+
+import six
 from six.moves.urllib.parse import urlparse
 
 import requests
@@ -22,7 +24,7 @@ def get_ip():
     try:
         s.connect(('8.8.8.8', 1))
         IP = '.'.join(s.getsockname()[0].split(".")[0:-1])
-    except:
+    except Exception:
         IP = '192.168.0'
     finally:
         s.close()
@@ -32,7 +34,7 @@ def get_ip():
 
 def load_conf():
     directory = os.path.split(os.path.realpath(__file__))[0]
-    with open(os.path.join(directory, "config.yml"), "r") as stream:
+    with open(os.path.join(directory, "config2.yml"), "r") as stream:
         try:
             return yaml.safe_load(stream)
         except yaml.YAMLError as e:
@@ -112,7 +114,12 @@ def download():
 def on_complete(user, filename):
     if not user:
         return
-    curr_user = next(filter(lambda person: person['username'] == user, conf["users"]))
+
+    if six.PY2:
+        curr_user = filter(lambda person: person['username'] == user, conf["users"])[0]
+    else:
+        curr_user = next(filter(lambda person: person['username'] == user, conf["users"]))
+
     if curr_user["notify_via_pushbullet"]:
         try:
             from pushbullet import Pushbullet
