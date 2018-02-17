@@ -8,7 +8,7 @@ import sys
 import threading
 from functools import wraps
 from os.path import splitext
-from urllib.parse import urlparse
+from six.moves.urllib.parse import urlparse
 
 import requests
 import yaml
