@@ -34,7 +34,7 @@ def get_ip():
 
 def load_conf():
     directory = os.path.split(os.path.realpath(__file__))[0]
-    with open(os.path.join(directory, "config2.yml"), "r") as stream:
+    with open(os.path.join(directory, "config.yml"), "r") as stream:
         try:
             return yaml.safe_load(stream)
         except yaml.YAMLError as e:
