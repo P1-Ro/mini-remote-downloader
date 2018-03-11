@@ -16,7 +16,10 @@ class DownloaderTestCase(unittest.TestCase):
     def make_request(self, data):
         return self.app.post("/download/", data=json.dumps(data), headers=self.headers)
 
-    def make_wrong_request(self, data):
+    def make_wrong_request(self):
+        data = dict(
+            url="https://mrose.org/cc/png-test.png"
+        )
         return self.app.post("/download/", data=json.dumps(data), headers={
             "Content-Type": "application/json"
         })
@@ -44,23 +47,19 @@ class DownloaderTestCase(unittest.TestCase):
 
     def test_general_download_without_name(self):
         tmp = self.make_request(dict(
-            url="https://mrose.org/cc/png-test.png",
+            url="http://via.placeholder.com/359x150",
             category="test2"
         ))
         assert tmp.status_code == 200
 
     def test_download_without_auth_local(self):
-        tmp = self.make_wrong_request(dict(
-            url="https://mrose.org/cc/png-test.png"
-        ))
+        tmp = self.make_wrong_request()
         assert tmp.status_code == 200
 
     def test_download_without_auth_remote(self):
         old = app.conf["local_network_without_login"]
         app.conf["local_network_without_login"] = False
-        tmp = self.make_wrong_request(dict(
-            url="https://mrose.org/cc/png-test.png"
-        ))
+        tmp = self.make_wrong_request()
         app.conf["local_network_without_login"] = old
         assert tmp.status_code == 401
 
@@ -124,6 +123,10 @@ class DownloaderTestCase(unittest.TestCase):
     def test_pushbullet(self):
         tmp = app.on_complete("USERNAME", "test")
         assert tmp is True
+
+    def test_download_without_user(self):
+        tmp = app.on_complete(None, "test")
+        assert tmp is None
 
 
 if __name__ == "__main__":
