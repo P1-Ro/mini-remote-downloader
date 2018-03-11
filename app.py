@@ -26,6 +26,7 @@ def get_ip():
         IP = '.'.join(s.getsockname()[0].split(".")[0:-1])
     except Exception:
         IP = '192.168.0'
+        print("Cannot detect local IP, instead using: 192.168.0", file=sys.stderr)
     finally:
         s.close()
 
@@ -38,7 +39,7 @@ def load_conf():
         try:
             return yaml.safe_load(stream)
         except yaml.YAMLError as e:
-            print(e, file=sys.stderr)
+            raise SystemExit(e)
 
 
 conf = load_conf()
