@@ -59,13 +59,13 @@ If you want to be able download videos from youtube you need to perform these st
  ```
  2) _[Optional]_ Install PhantomJs if you want to download from Openload:
     
-    [Instalation for Linux](https://gist.github.com/julionc/7476620)
+    [Installation for Linux](https://gist.github.com/julionc/7476620)
     
-    [Instalation for Windows](https://www.joecolantonio.com/2014/10/14/how-to-install-phantomjs/)
+    [Installation for Windows](https://www.joecolantonio.com/2014/10/14/how-to-install-phantomjs/)
     
  3) _[Optional]_ Install [FFmpeg](https://www.ffmpeg.org/) if you want to download mp3 from Youtube
  
-    [Instalation guid for Linux and Windows](https://github.com/adaptlearning/adapt_authoring/wiki/Installing-FFmpeg)
+    [Installation guide for Linux and Windows](https://github.com/adaptlearning/adapt_authoring/wiki/Installing-FFmpeg)
    
  
  
