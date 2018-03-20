@@ -29,7 +29,7 @@ It is protected by `Basic Auth` and each user can be notified individually.
 You can use included web interface or via `POST` request.
 
 ### Web Interface
-Navigate your browser to `http://{SERVER_ADDRESS}`, browser will ask you for username and password. After login you can start downloading.
+Navigate your browser to `http://{SERVER_ADDRESS}:9000`, browser will ask you for username and password. After login you can start downloading.
 Here is screenshot: 
 
 ![Screenshot of web interface](https://github.com/P1-Ro/mini-remote-downloader/blob/master/screenshot.png)
