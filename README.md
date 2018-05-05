@@ -18,7 +18,7 @@ It is protected by `Basic Auth` and each user can be notified individually.
     username: USERNAME
     password: PASSWORD
     ```
-    
+
 2. Start python app
     ```
     python app.py
@@ -26,7 +26,7 @@ It is protected by `Basic Auth` and each user can be notified individually.
     
 ## Usage
 
-You can use included web interface or via `POST` request.
+You can use downloader with included web interface or via `POST` request.
 
 ### Web Interface
 Navigate your browser to `http://{SERVER_ADDRESS}:9000`, browser will ask you for username and password. After login you can start downloading.
@@ -79,3 +79,7 @@ If you want to be able download videos from youtube you need to perform these st
  2) Set flag `notify_via_pushbullet` in `config.yml` to `True`
  3) Set `pushbullet_token` in `config.yml` to your Access Token which you can get [here](https://www.pushbullet.com/#settings)
  4) Repeat steps 2 and 3 for every user you want to get notified.
+
+## TODOS
+
+- [ ] Add progress/download screen similar to what browser use
