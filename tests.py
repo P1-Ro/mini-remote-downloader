@@ -34,6 +34,10 @@ class DownloaderTestCase(unittest.TestCase):
         tmp = self.app.get("/", headers=self.headers)
         assert tmp.status_code == 200
 
+    def test_downloads_page(self):
+        tmp = self.app.get("/downloads/", headers=self.headers)
+        assert tmp.status_code == 200
+
     def test_general_download(self):
         old = app.conf["local_network_without_login"]
         app.conf["local_network_without_login"] = False
