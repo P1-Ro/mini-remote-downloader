@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mini Remote Downloader</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Roboto" rel="stylesheet">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<nav>
+    <div class="nav-wrapper blue-grey darken-4">
+
+        <div class="brand-logo">Mini Remote Downloader</div>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="/">Main page</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="card-panel downloader-card hide" id="templateCard">
+        <div class="row">
+            <div>
+                <span class="file-name bold downloader-left-side text-overflow" title="Suits S01E01">Suits S01E01</span>
+                <div class="row">
+                        <div class="progress col s11">
+                            <div class="determinate " style="width: 0%"></div>
+                        </div>
+                        <span class="col percentage s1">0%</span>
+                </div>
+            </div>
+            <div class="row">
+                <span class="file-category col s4">
+                    <i class="material-icons">folder_open</i>
+                    <span class="path">Downloads</span>
+                </span>
+                <span class="file-stats text-overflow col s8">
+                    <span class="time">-</span> left (
+                    <span class="size-total"></span>,
+                    <span class="speed">0MiB/s</span> )
+                </span>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+<script src="{{ url_for('static', filename='downloads.js') }}"></script>
+</html>

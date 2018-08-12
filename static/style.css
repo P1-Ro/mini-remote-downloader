@@ -21,8 +21,12 @@ body {
     margin-bottom: 0;
 }
 
-.container {
+.container-margin-top {
     margin-top: 15vh;
+}
+
+.bold{
+    font-weight: bold;
 }
 
 em {
@@ -67,4 +71,41 @@ input {
     margin-top: -40px;
     margin-left: 50px;
     position: relative;
+}
+
+.downloader-left-side{
+    width: 20vw;
+    display: inline-block;
+}
+
+.file-url{
+    width: 65%;
+}
+
+.text-overflow{
+    display: inline-block;
+    word-break: break-all;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.container div,
+.container span{
+        vertical-align: bottom;
+}
+
+.remove{
+    float: right;
+    margin-top: -20px;
+    margin-right: -20px;
+    color: #37474f;
+}
+
+.file-category i {
+    vertical-align: bottom;
+}
+
+.percentage {
+    text-align: center;
 }

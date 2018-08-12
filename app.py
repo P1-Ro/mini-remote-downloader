@@ -6,6 +6,7 @@ import os
 import socket
 import sys
 import threading
+import uuid
 from functools import wraps
 from os.path import splitext
 
@@ -15,8 +16,12 @@ from six.moves.urllib.parse import urlparse
 import requests
 import yaml
 from flask import Flask, request, jsonify, Response, render_template
+from flask_socketio import SocketIO
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = str(uuid.uuid4())
+socketio = SocketIO(app, async_mode='threading')
+all_downloads = {}
 
 
 def get_ip():
@@ -92,6 +97,12 @@ def login_page():
     return render_template('index.html')
 
 
+@app.route('/downloads/')
+@requires_auth
+def downloads():
+    return render_template('downloads.html')
+
+
 @app.route('/download/', methods=['POST'])
 @requires_auth
 def download():
@@ -110,6 +121,11 @@ def download():
     except Exception as e:
         result = {"error": True, "reason": str(e)}
         return jsonify(result), 500
+
+
+@socketio.on("get_downloads")
+def get_downloads():
+    return all_downloads
 
 
 def on_complete(user, filename):
@@ -162,7 +178,8 @@ def download_in_background(data):
 
         ydl_options = {
             # Download best mp4 format available or any other best if no mp4 available
-            "outtmpl": out_tmpl
+            "outtmpl": out_tmpl,
+            'progress_hooks': [progress_hook]
         }
 
         if "audioOnly" in data:
@@ -188,6 +205,28 @@ def download_in_background(data):
     return True
 
 
+def progress_hook(data):
+    filename = data["filename"]
+    resp = {}
+
+    if filename not in all_downloads.keys():
+        socketio.emit("new_download", {"filename": filename, "size": data["_total_bytes_str"]})
+
+    resp["status"] = data["status"]
+    resp["filename"] = filename
+
+    if data['status'] == 'finished':
+        del all_downloads[filename]
+
+    elif data['status'] == 'downloading':
+        resp["eta"] = data["_eta_str"]
+        resp["progress"] = data["_percent_str"]
+        resp["speed"] = data["_speed_str"]
+        all_downloads[filename] = data
+
+    socketio.emit(filename, resp)
+
+
 def already_has_extension(url):
     parsed = urlparse(url)
     ext = splitext(parsed.path)[1]
@@ -195,7 +234,6 @@ def already_has_extension(url):
 
 
 def get_extension(url):
-
     if not already_has_extension(url):
         if is_streaming_site(url):
             extension = ".mp4"
@@ -226,4 +264,4 @@ def is_streaming_site(url):
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=9000)
+    socketio.run(app, host="0.0.0.0", port=9000, debug=True)
