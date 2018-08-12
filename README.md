@@ -82,5 +82,5 @@ If you want to be able download videos from youtube you need to perform these st
 
 ## TODOS
 
-- [x] Add progress/download screen similar to what browser use
+- [x] ~~Add progress/download screen similar to what browser use~~
 - [ ] Make pages responsive
