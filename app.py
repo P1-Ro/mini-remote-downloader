@@ -215,7 +215,7 @@ def progress_hook(data):
     resp["status"] = data["status"]
     resp["filename"] = filename
 
-    if data['status'] == 'finished':
+    if data['status'] == 'finished' and filename in all_downloads.keys():
         del all_downloads[filename]
 
     elif data['status'] == 'downloading':
