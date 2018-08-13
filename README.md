@@ -5,21 +5,26 @@ Built with as little dependecies as possible.
 **Optionally** supports downloading video or audio from [Youtube](http://youtube.com)/[Openload](https://openload.co/) and sending notification via [PushBullet](https://www.pushbullet.com).
 It is protected by `Basic Auth` and each user can be notified individually.
 
-## Deploy
+## Installation
 
-0. Clone this repo
+1. Clone this repo
     ```
     git clone https://github.com/P1-Ro/mini-remote-downloader.git
     ```
 
-1. Replace placeholders in `config.yml`
+2. Install minimal requirements
+    ```
+     pip install -r requirements.txt
+    ```
+
+3. Replace placeholders in `config.yml`
     ```
     path: PATH
     username: USERNAME
     password: PASSWORD
     ```
 
-2. Start python app
+4. Start python app
     ```
     python app.py
     ```
@@ -35,7 +40,7 @@ Here is screenshot:
 ![Screenshot of web interface](https://github.com/P1-Ro/mini-remote-downloader/blob/master/screenshot.png)
 
 ### Request
-To start downloading simply make `POST` request on `http://{SERVER_ADDRESS}:9000/download/` with JSON which looks like this:
+To start downloading simply make `POST` request on `http://{SERVER_ADDRESS}:9000/download/` with JSON body which looks like this:
 ```
 {
     "url": "http://example.com",     // url to be downloaded
@@ -44,7 +49,7 @@ To start downloading simply make `POST` request on `http://{SERVER_ADDRESS}:9000
     "audioOnly": true [optional]     // if you want to download only audio from Youtube
 }
 ``` 
-And also use `Authorization` header with same `USERNAME` and `PASSWORD` you set in `config.yml` , otherwise you will get **`401 Unathorized`** response
+And also use `Authorization` header with same `USERNAME` and `PASSWORD` you set in `config.yml` , otherwise you will get **`401 Unathorized`** response (Unless it is on local network with `local_network_without_login` set to `True`)
 
 If dowloading started successfully Status code **`200`** will be returned, otherwise Status code will be **`500`** with actual error message in `JSON`.
 
@@ -77,7 +82,7 @@ If you want to be able download videos from youtube you need to perform these st
  pip install pushbullet.py
  ``` 
  2) Set flag `notify_via_pushbullet` in `config.yml` to `True`
- 3) Set `pushbullet_token` in `config.yml` to your Access Token which you can get [here](https://www.pushbullet.com/#settings)
+ 3) Set `pushbullet_token` in `config.yml` to your Access Token, which you can get [here](https://www.pushbullet.com/#settings)
  4) Repeat steps 2 and 3 for every user you want to get notified.
 
 ## TODOS
