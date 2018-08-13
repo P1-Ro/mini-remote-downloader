@@ -10,8 +10,6 @@ function updateNode(data){
         let progressBar = $(node).find(".progress");
         $(progressBar).children().first().css("width", data.progress);
         progressBar.next().html(data.progress);
-    } else {
-        console.log(data);
     }
 }
 
@@ -50,11 +48,13 @@ $(function () {
     socket.on("connect", function () {
        socket.emit("get_downloads", function (data) {
            for(let key in data){
-               let curr = data[key];
-                createNode(curr);
-                socket.on(curr.filename, updateNode);
+               if(data.hasOwnProperty(key)){
+                 let curr = data[key];
+                 createNode(curr);
+                  socket.on(curr.filename, updateNode);
+               }
            }
-       })
+       });
     });
 
     socket.on("new_download", function (data) {
