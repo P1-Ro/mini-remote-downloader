@@ -68,7 +68,7 @@ def can_access(username, password):
 
 
 def is_allowed_ip(ip):
-    return (conf["local_network_without_login"] and ip.startswith(allowed_ip_prefix)) or ip == "127.0.0.1"
+    return conf["local_network_without_login"] and (ip.startswith(allowed_ip_prefix) or ip == "127.0.0.1")
 
 
 def authenticate():
@@ -83,7 +83,7 @@ def requires_auth(f):
     def decorated(*args, **kwargs):
         auth = request.authorization
         ip = request.remote_addr
-        if not is_allowed_ip(ip) or not auth or not can_access(auth.username, auth.password):
+        if not is_allowed_ip(ip) and (not auth or not can_access(auth.username, auth.password)):
             return authenticate()
         return f(*args, **kwargs)
 
@@ -265,7 +265,6 @@ def get_extension_from_content_type(url):
 
 
 def get_extension(url):
-
     if not already_has_extension(url):
         if is_streaming_site(url):
             if not ydl_installed:
@@ -289,4 +288,4 @@ def is_streaming_site(url):
 
 
 if __name__ == '__main__':
-    socketio.run(app, host="0.0.0.0", port=9000, debug=True)
+    socketio.run(app, host="0.0.0.0", port=9000)
