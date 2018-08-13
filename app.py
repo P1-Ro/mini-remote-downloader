@@ -155,15 +155,53 @@ def on_complete(user, filename):
         send_pushbullet_notification(curr_user, filename)
 
 
-def download_in_background(data):
-    url = data["url"]
+def download_with_ydl(data, url, name, path):
+    if name:
+        out_tmpl = path
+    else:
+        out_tmpl = os.path.join(path, "%(title)s.%(ext)s")
 
+    ydl_options = {
+        "outtmpl": out_tmpl,
+        'progress_hooks': [progress_hook]
+    }
+
+    if "audioOnly" in data:
+        ydl_options["out_format"] = "bestaudio/best"
+        ydl_options["postprocessors"] = [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': conf["audio_codec"],
+            'preferredquality': str(conf["audio_kbps"]),
+        }]
+    else:
+        ydl_options["out_format"] = "best[ext=mp4]/best"
+
+    ydl = youtube_dl.YoutubeDL(ydl_options)
+    with ydl:
+        info = ydl.extract_info(url=url, download=True)
+        on_complete(data["user"], info["title"])
+
+
+def standard_download(data, url, name, path):
+    r = requests.get(url)
+    with open(path, "wb+") as code:
+        code.write(r.content)
+    on_complete(data["user"], name)
+
+
+def get_name(data):
+    url = data["url"]
     name = ""
+
     if "name" in data:
         name = data["name"] + data["extension"]
     elif "youtube" not in url and "oload" not in url:
         name = url.split("/")[-1] + data["extension"]
 
+    return name
+
+
+def get_path(data, name):
     if "category" in data:
         path = os.path.join(conf["path"], data["category"])
         if not os.path.exists(path):
@@ -172,39 +210,19 @@ def download_in_background(data):
     else:
         path = os.path.join(conf["path"], name)
 
-    if ("youtube" in url or "oload" in url) and ydl_installed:
+    return path
 
-        if name:
-            out_tmpl = path
-        else:
-            out_tmpl = os.path.join(path, "%(title)s.%(ext)s")
 
-        ydl_options = {
-            # Download best mp4 format available or any other best if no mp4 available
-            "outtmpl": out_tmpl,
-            'progress_hooks': [progress_hook]
-        }
+def download_in_background(data):
+    url = data["url"]
 
-        if "audioOnly" in data:
-            ydl_options["out_format"] = "bestaudio/best"
-            ydl_options["postprocessors"] = [{
-                'key': 'FFmpegExtractAudio',
-                'preferredcodec': conf["audio_codec"],
-                'preferredquality': str(conf["audio_kbps"]),
-            }]
-        else:
-            ydl_options["out_format"] = "best[ext=mp4]/best"
+    name = get_name(data)
+    path = get_path(data, name)
 
-        ydl = youtube_dl.YoutubeDL(ydl_options)
-        with ydl:
-            info = ydl.extract_info(url=url, download=True)
-            on_complete(data["user"], info["title"])
-
+    if "youtube" in url or "oload" in url:
+        download_with_ydl(data, url, name, path)
     else:
-        r = requests.get(url)
-        with open(path, "wb+") as code:
-            code.write(r.content)
-        on_complete(data["user"], name)
+        standard_download(data, url, name, path)
     return True
 
 
