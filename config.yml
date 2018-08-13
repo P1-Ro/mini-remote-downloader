@@ -4,7 +4,7 @@ path: PATH
 
 # Codec for audio files
 # Currently supported codecs:  aac, flac, mp3, m4a, opus, vorbis, or wav
-audio_codec: CODEC
+audio_codec: mp3
 
 # Bitrate for audio files
 audio_kbps: 320
@@ -15,12 +15,12 @@ local_network_without_login: True
 users:
     - username: USERNAME
       password: PASSWORD
-      notify_via_pushbullet: True
+      notify_via_pushbullet: False
       pushbullet_token: TOKEN
 
 # If you want more users just add more of these blocks
 
 #    - username: USERNAME2
 #      password: PASSWORD2
-#      notify_via_pushbullet: True
+#      notify_via_pushbullet: False
 #      pushbullet_token: TOKEN2
