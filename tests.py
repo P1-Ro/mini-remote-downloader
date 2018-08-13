@@ -16,6 +16,9 @@ class DownloaderTestCase(unittest.TestCase):
     def make_request(self, data):
         return self.app.post("/download/", data=json.dumps(data), headers=self.headers)
 
+    def get_request(self, endpoint):
+        return self.app.get(endpoint, headers=self.headers)
+
     def make_wrong_request(self):
         data = dict(
             url="https://mrose.org/cc/png-test.png"
@@ -31,11 +34,11 @@ class DownloaderTestCase(unittest.TestCase):
         assert tmp.status_code == 500
 
     def test_landing_page(self):
-        tmp = self.app.get("/", headers=self.headers)
+        tmp = self.get_request("/").status_code
         assert tmp.status_code == 200
 
     def test_downloads_page(self):
-        tmp = self.app.get("/downloads/", headers=self.headers)
+        tmp = self.get_request("/downloads/").status_code
         assert tmp.status_code == 200
 
     def test_general_download(self):
