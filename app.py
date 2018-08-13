@@ -68,7 +68,7 @@ def can_access(username, password):
 
 
 def is_allowed_ip(ip):
-    return conf["local_network_without_login"] and (ip.startswith(allowed_ip_prefix) or ip == "127.0.0.1")
+    return (conf["local_network_without_login"] and ip.startswith(allowed_ip_prefix)) or ip == "127.0.0.1"
 
 
 def authenticate():
@@ -152,7 +152,7 @@ def on_complete(user, filename):
         curr_user = next(filter(lambda person: person['username'] == user, conf["users"]))
 
     if curr_user["notify_via_pushbullet"]:
-        send_pushbullet_notification(curr_user, filename)
+        return send_pushbullet_notification(curr_user, filename)
 
 
 def download_with_ydl(data, url, name, path):
@@ -265,17 +265,17 @@ def get_extension_from_content_type(url):
 
 
 def get_extension(url):
-    extension = ""
 
     if not already_has_extension(url):
         if is_streaming_site(url):
-            extension = ".mp4"
             if not ydl_installed:
                 raise Exception("Trying to download from Youtube/Openload without youtube-dl library installed")
+            else:
+                return ".mp4"
         else:
-            extension = get_extension_from_content_type(url)
+            return get_extension_from_content_type(url)
 
-    return extension
+    return ""
 
 
 def is_streaming_site(url):
