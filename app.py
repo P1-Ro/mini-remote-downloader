@@ -58,7 +58,7 @@ except ImportError:
     ydl_installed = False
 
 
-def check_auth(username, password):
+def can_access(username, password):
     users = conf["users"]
     for user_settings in users:
         if username == user_settings["username"] and password == user_settings["password"]:
@@ -83,9 +83,8 @@ def requires_auth(f):
     def decorated(*args, **kwargs):
         auth = request.authorization
         ip = request.remote_addr
-        if not is_allowed_ip(ip):
-            if not auth or not check_auth(auth.username, auth.password):
-                return authenticate()
+        if not is_allowed_ip(ip) or not auth or not can_access(auth.username, auth.password):
+            return authenticate()
         return f(*args, **kwargs)
 
     return decorated
@@ -128,6 +127,21 @@ def get_downloads():
     return all_downloads
 
 
+def send_pushbullet_notification(curr_user, filename):
+    try:
+        from pushbullet import Pushbullet
+        pb = Pushbullet(curr_user["pushbullet_token"])
+        pb.push_note("Download finished", filename)
+        return True
+    except ImportError:
+        print("Cant notify via PushBullet. Missing librabry. Install via pip install pushbullet.py",
+              file=sys.stderr)
+        return False
+    except Exception:
+        print("Invalid Api key for PushBullet. Please insert correct one.", file=sys.stderr)
+        return False
+
+
 def on_complete(user, filename):
     if not user:
         return
@@ -138,18 +152,7 @@ def on_complete(user, filename):
         curr_user = next(filter(lambda person: person['username'] == user, conf["users"]))
 
     if curr_user["notify_via_pushbullet"]:
-        try:
-            from pushbullet import Pushbullet
-            pb = Pushbullet(curr_user["pushbullet_token"])
-            pb.push_note("Download finished", filename)
-            return True
-        except ImportError:
-            print("Cant notify via PushBullet. Missing librabry. Install via pip install pushbullet.py",
-                  file=sys.stderr)
-            return False
-        except Exception:
-            print("Invalid Api key for PushBullet. Please insert correct one.", file=sys.stderr)
-            return False
+        send_pushbullet_notification(curr_user, filename)
 
 
 def download_in_background(data):
@@ -233,22 +236,26 @@ def already_has_extension(url):
     return len(ext) != 0
 
 
+def get_extension_from_content_type(url):
+    try:
+        res = requests.get(url)
+        content_type = res.headers['content-type']
+        return mimetypes.guess_extension(content_type)
+
+    except requests.ConnectionError:
+        raise Exception("Invalid or malformed URL")
+
+
 def get_extension(url):
+    extension = ""
+
     if not already_has_extension(url):
         if is_streaming_site(url):
             extension = ".mp4"
             if not ydl_installed:
-                raise Exception("Trying to download from Youtube/Openload without youtube-dl library")
+                raise Exception("Trying to download from Youtube/Openload without youtube-dl library installed")
         else:
-            try:
-                res = requests.get(url)
-                content_type = res.headers['content-type']
-                extension = mimetypes.guess_extension(content_type)
-
-            except requests.ConnectionError:
-                raise Exception("Invalid or malformed URL")
-    else:
-        extension = ""
+            extension = get_extension_from_content_type(url)
 
     return extension
 
