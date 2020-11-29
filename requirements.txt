@@ -1,6 +1,6 @@
 requests
 PyYAML==3.12
-click==6.6
+click==7.1.2
 contextlib2==0.5.4
 coverage==4.4.1
 Flask==1.0
