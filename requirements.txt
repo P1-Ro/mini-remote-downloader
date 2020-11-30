@@ -3,7 +3,7 @@ PyYAML==3.12
 click==7.1.2
 contextlib2==0.6.0.post1
 coverage==5.3
-Flask==1.0
+Flask==1.1.2
 Flask-SocketIO==3.0.1
 itsdangerous==0.24
 Jinja2==2.8.1
