@@ -9,4 +9,4 @@ itsdangerous==0.24
 Jinja2==2.8.1
 MarkupSafe==0.23
 six==1.15.0
-Werkzeug==0.15.3
+Werkzeug==1.0.1
