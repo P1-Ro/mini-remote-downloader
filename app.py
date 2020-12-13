@@ -131,7 +131,8 @@ def send_pushbullet_notification(curr_user, filename):
     try:
         from pushbullet import Pushbullet
         pb = Pushbullet(curr_user["pushbullet_token"])
-        pb.push_note("Download finished", filename)
+        device = pb.devices[0] if app.testing else None
+        pb.push_note("MiniRemoteDownloader - Download finished", filename, device)
         return True
     except ImportError:
         print("Cant notify via PushBullet. Missing librabry. Install via pip install pushbullet.py",

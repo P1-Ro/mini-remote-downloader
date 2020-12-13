@@ -1,6 +1,6 @@
 ---
 # Path where to store downloads
-path: PATH
+path: ./downloads
 
 # Codec for audio files
 # Currently supported codecs:  aac, flac, mp3, m4a, opus, vorbis, or wav
