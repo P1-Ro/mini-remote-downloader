@@ -5,7 +5,7 @@ contextlib2==0.6.0.post1
 coverage==5.3
 Flask==1.1.2
 Flask-SocketIO==4.3.2
-itsdangerous==1.0.1
+itsdangerous==1.1.0
 Jinja2==2.10.1
 MarkupSafe==1.1.1
 six==1.15.0
