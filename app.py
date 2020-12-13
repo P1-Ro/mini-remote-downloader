@@ -14,7 +14,7 @@ import six
 from six.moves.urllib.parse import urlparse
 
 import requests
-import yaml
+import ruamel.yaml as yaml
 from flask import Flask, request, jsonify, Response, render_template
 from flask_socketio import SocketIO
 

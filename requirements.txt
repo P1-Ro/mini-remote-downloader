@@ -1,5 +1,5 @@
 requests
-PyYAML==3.12
+ruamel.yaml==0.16.12
 click==7.1.2
 contextlib2==0.6.0.post1
 coverage==5.3
